@@ -1,10 +1,11 @@
 package com.vinklearns.aopdemo;
 
+import com.vinklearns.aopdemo.beans.Account;
 import com.vinklearns.aopdemo.dao.AccountDAO;
+import com.vinklearns.aopdemo.dao.MembershipDAO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -15,17 +16,26 @@ public class AopdemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(AccountDAO theAccountDAO) {
+	public CommandLineRunner commandLineRunner(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
 		return runner -> {
-			demoTheBeforeAdvice(theAccountDAO);
+			demoTheBeforeAdvice(theAccountDAO, theMembershipDAO);
 		};
 	}
 
-	private void demoTheBeforeAdvice(AccountDAO theAccountDAO) {
-		theAccountDAO.addAccount();
+	private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
+		Account theAccount = new Account();
+		theAccount.setName("John Doe");
+		theAccount.setLevel("1");
 
-		System.out.println("\nCalling it again => \n");
+		theAccountDAO.addAccount(theAccount, true);
+		theMembershipDAO.addMember();
 
-		theAccountDAO.addAccount();
+		theAccountDAO.doWork();
+		theMembershipDAO.goToMembership();
+
+		// System.out.println("\nCalling it again => \n");
+
+		// theAccountDAO.addAccount();
+		// theMembershipDAO.addAccount();
 	}
 }
